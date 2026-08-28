@@ -1,0 +1,42 @@
+#fli-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1em;
+    height: 2.1em;
+    cursor: pointer;
+    border-radius: 6px;
+    opacity: 0.85;
+    transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+#fli-toggle-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#fli-toggle-btn.fli-active {
+    opacity: 1;
+}
+
+#fli-toggle-btn #fli-toggle-icon {
+    font-size: 1.15em;
+    line-height: 1;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.35));
+}
+
+.fli-settings-block .inline-drawer-content label {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+
+.fli-settings-block .inline-drawer-content input.text_pole {
+    width: 4em;
+}
+
+.fli-settings-block .inline-drawer-content small {
+    display: block;
+    margin-top: 10px;
+    opacity: 0.75;
+}
