@@ -12,6 +12,7 @@ const DEFAULT_CONFIG = {
     onEmoji: "🔵",
     offEmoji: "🔴",
     iconSize: 24,
+    iconMarginRight: 6,
     wrapTag: "User's Input",
 };
 
@@ -143,6 +144,7 @@ function applyButtonIcon() {
             height: `${config.iconSize}px`,
             flex: `0 0 ${config.iconSize}px`,
             fontSize: `${config.iconSize * 0.55}px`,
+            marginRight: `${config.iconMarginRight}px`,
         });
 }
 
@@ -192,6 +194,9 @@ function buildSettingsPanel() {
                 <label for="fli-icon-size-input">아이콘 크기 (px)</label>
                 <input id="fli-icon-size-input" class="text_pole" type="number" min="12" max="64" step="1" value="${config.iconSize}">
 
+                <label for="fli-icon-margin-input">오른쪽 여백 (px)</label>
+                <input id="fli-icon-margin-input" class="text_pole" type="number" min="0" max="40" step="1" value="${config.iconMarginRight}">
+
                 <label for="fli-wrap-tag-input">감싸는 태그 이름 (&lt;태그&gt;내용&lt;/태그&gt;)</label>
                 <input id="fli-wrap-tag-input" class="text_pole" type="text" maxlength="60" value="${config.wrapTag}">
 
@@ -223,6 +228,15 @@ function buildSettingsPanel() {
         if (isNaN(val)) return;
         val = Math.min(64, Math.max(12, val));
         getConfig().iconSize = val;
+        saveConfig();
+        applyButtonIcon();
+    });
+
+    $("#fli-icon-margin-input").on("input", function () {
+        let val = parseInt($(this).val(), 10);
+        if (isNaN(val)) return;
+        val = Math.min(40, Math.max(0, val));
+        getConfig().iconMarginRight = val;
         saveConfig();
         applyButtonIcon();
     });
