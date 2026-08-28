@@ -186,10 +186,10 @@ function buildSettingsPanel() {
             </div>
             <div class="inline-drawer-content">
                 <label for="fli-on-emoji-input">켜짐(ON) 아이콘</label>
-                <input id="fli-on-emoji-input" class="text_pole" type="text" maxlength="4" value="${config.onEmoji}">
+                <input id="fli-on-emoji-input" class="text_pole" type="text" maxlength="10" value="${config.onEmoji}">
 
                 <label for="fli-off-emoji-input">꺼짐(OFF) 아이콘</label>
-                <input id="fli-off-emoji-input" class="text_pole" type="text" maxlength="4" value="${config.offEmoji}">
+                <input id="fli-off-emoji-input" class="text_pole" type="text" maxlength="10" value="${config.offEmoji}">
 
                 <label for="fli-icon-size-input">아이콘 크기 (px)</label>
                 <input id="fli-icon-size-input" class="text_pole" type="number" min="12" max="64" step="1" value="${config.iconSize}">
