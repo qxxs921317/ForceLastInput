@@ -89,6 +89,7 @@ function onChatCompletionPromptReady(eventData) {
         const payload = wrapUserInput(lastUserText);
         chat.push({ role: "user", content: payload });
         console.log(`[Force Last Input] chat-completion 맨 끝으로 강제 재배치됨 (len=${payload.length})`);
+        lastUserText = ""; // 한 번 적용했으면 소모 처리 - 다음 생성(이어가기/재생성/빈 전송)엔 관여 안 함
     } catch (e) {
         console.error("[Force Last Input] chat-completion 재배치 실패:", e);
     }
@@ -106,6 +107,7 @@ function onTextCompletionPromptReady(eventData) {
         const payload = wrapUserInput(lastUserText);
         eventData.prompt = `${eventData.prompt}\n${payload}\n`;
         console.log(`[Force Last Input] text-completion 맨 끝에 강제 삽입됨 (len=${payload.length})`);
+        lastUserText = ""; // 한 번 적용했으면 소모 처리
     } catch (e) {
         console.error("[Force Last Input] text-completion 재배치 실패:", e);
     }
