@@ -14,6 +14,7 @@ const DEFAULT_CONFIG = {
 };
 
 let lastUserText = ""; // 가장 최근에 "전송"된 유저 메시지 원문
+const WRAP_TAG = "User's Input"; // AI가 안 헷갈리게 감싸는 태그명
 
 // ---------- 설정 헬퍼 ----------
 
@@ -54,6 +55,10 @@ function isForceEnabled() {
     return !!getConfig().enabled && !!lastUserText;
 }
 
+function wrapUserInput(text) {
+    return `<${WRAP_TAG}>\n${text}\n</${WRAP_TAG}>`;
+}
+
 // Chat Completion (Gemini/Vertex, Claude API, OpenAI 등)
 function onChatCompletionPromptReady(eventData) {
     try {
@@ -74,12 +79,11 @@ function onChatCompletionPromptReady(eventData) {
             }
         }
 
-        let payload = lastUserText;
         if (removeIndex !== -1) {
-            payload = chat[removeIndex].content;
             chat.splice(removeIndex, 1);
         }
 
+        const payload = wrapUserInput(lastUserText);
         chat.push({ role: "user", content: payload });
         console.log(`[Force Last Input] chat-completion 맨 끝으로 강제 재배치됨 (len=${payload.length})`);
     } catch (e) {
@@ -96,8 +100,9 @@ function onTextCompletionPromptReady(eventData) {
 
         // 문자열 프롬프트는 정확한 위치 splice가 불가능하므로,
         // 원문이 이미 포함돼 있어도 강조용으로 맨 끝에 한 번 더 붙여 절대 안 밀리게 함.
-        eventData.prompt = `${eventData.prompt}\n${lastUserText}\n`;
-        console.log(`[Force Last Input] text-completion 맨 끝에 강제 삽입됨 (len=${lastUserText.length})`);
+        const payload = wrapUserInput(lastUserText);
+        eventData.prompt = `${eventData.prompt}\n${payload}\n`;
+        console.log(`[Force Last Input] text-completion 맨 끝에 강제 삽입됨 (len=${payload.length})`);
     } catch (e) {
         console.error("[Force Last Input] text-completion 재배치 실패:", e);
     }

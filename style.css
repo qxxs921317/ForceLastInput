@@ -2,8 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.1em;
-    height: 2.1em;
+    width: 35px;
+    height: 35px;
+    flex: 0 0 35px;
     cursor: pointer;
     border-radius: 6px;
     opacity: 0.85;
@@ -20,7 +21,7 @@
 }
 
 #fli-toggle-btn #fli-toggle-icon {
-    font-size: 1.15em;
+    font-size: 1em;
     line-height: 1;
     filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.35));
 }
