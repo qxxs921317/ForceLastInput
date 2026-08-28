@@ -11,10 +11,11 @@ const DEFAULT_CONFIG = {
     enabled: false,
     onEmoji: "🔵",
     offEmoji: "🔴",
+    iconSize: 24,
+    wrapTag: "User's Input",
 };
 
 let lastUserText = ""; // 가장 최근에 "전송"된 유저 메시지 원문
-const WRAP_TAG = "User's Input"; // AI가 안 헷갈리게 감싸는 태그명
 
 // ---------- 설정 헬퍼 ----------
 
@@ -56,7 +57,8 @@ function isForceEnabled() {
 }
 
 function wrapUserInput(text) {
-    return `<${WRAP_TAG}>\n${text}\n</${WRAP_TAG}>`;
+    const tag = (getConfig().wrapTag || DEFAULT_CONFIG.wrapTag).trim() || DEFAULT_CONFIG.wrapTag;
+    return `<${tag}>\n${text}\n</${tag}>`;
 }
 
 // Chat Completion (Gemini/Vertex, Claude API, OpenAI 등)
@@ -135,7 +137,13 @@ function applyButtonIcon() {
     $(`#${ICON_ID}`).text(config.enabled ? config.onEmoji : config.offEmoji);
     $(`#${BTN_ID}`)
         .attr("title", config.enabled ? "입력 강제 최하단 삽입: 켜짐" : "입력 강제 최하단 삽입: 꺼짐")
-        .toggleClass("fli-active", config.enabled);
+        .toggleClass("fli-active", config.enabled)
+        .css({
+            width: `${config.iconSize}px`,
+            height: `${config.iconSize}px`,
+            flex: `0 0 ${config.iconSize}px`,
+            fontSize: `${config.iconSize * 0.55}px`,
+        });
 }
 
 function buildToggleButton() {
@@ -181,6 +189,12 @@ function buildSettingsPanel() {
                 <label for="fli-off-emoji-input">꺼짐(OFF) 아이콘</label>
                 <input id="fli-off-emoji-input" class="text_pole" type="text" maxlength="4" value="${config.offEmoji}">
 
+                <label for="fli-icon-size-input">아이콘 크기 (px)</label>
+                <input id="fli-icon-size-input" class="text_pole" type="number" min="12" max="64" step="1" value="${config.iconSize}">
+
+                <label for="fli-wrap-tag-input">감싸는 태그 이름 (&lt;태그&gt;내용&lt;/태그&gt;)</label>
+                <input id="fli-wrap-tag-input" class="text_pole" type="text" maxlength="60" value="${config.wrapTag}">
+
                 <small>💡 보내는 메시지가 맨 밑에 강제로 들어가서 AI가 절대 놓치지 않게 하는 기능이에요. 버튼은 전송 버튼 옆에 있어요.</small>
             </div>
         </div>
@@ -202,6 +216,21 @@ function buildSettingsPanel() {
         getConfig().offEmoji = val;
         saveConfig();
         applyButtonIcon();
+    });
+
+    $("#fli-icon-size-input").on("input", function () {
+        let val = parseInt($(this).val(), 10);
+        if (isNaN(val)) return;
+        val = Math.min(64, Math.max(12, val));
+        getConfig().iconSize = val;
+        saveConfig();
+        applyButtonIcon();
+    });
+
+    $("#fli-wrap-tag-input").on("input", function () {
+        const val = $(this).val().trim() || DEFAULT_CONFIG.wrapTag;
+        getConfig().wrapTag = val;
+        saveConfig();
     });
 }
 
